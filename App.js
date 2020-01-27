@@ -10,7 +10,7 @@ import {
   Title,
   H1,
   Button,
-  Text
+  Icon
 } from "native-base";
 import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
@@ -34,7 +34,7 @@ export default function App() {
 
   const homeHandler = () => {
     setContentView("HomeScreen");
-  }
+  };
 
   // render wait until assets loaded
   if (!dataLoaded) {
@@ -47,6 +47,7 @@ export default function App() {
     );
   }
 
+  // Screen navigation
   let content = <HomeScreen changeView={setContentView} />;
 
   if (contentView === "AboutScreen")
@@ -57,15 +58,17 @@ export default function App() {
   return (
     <Container>
       <Header style={styles.header}>
-        <Left />
+        <Left style={styles.left}>
+          <Button transparent onPress={homeHandler}>
+            <Icon name="home" />
+          </Button>
+        </Left>
         <Body style={styles.headerTitle}>
           <Title>
-            <H1 style={styles.h1}>Compound Interest Calculator</H1>
+            <H1 style={styles.h1}>CI Calc</H1>
           </Title>
         </Body>
-        <Right>
-          <Button onPress={homeHandler}><Text>Back</Text></Button>
-        </Right>
+        <Right style={styles.left}></Right>
       </Header>
       {content}
     </Container>
@@ -74,12 +77,19 @@ export default function App() {
 
 const styles = StyleSheet.create({
   header: {
-    height: 70
+    height: 70,
+    paddingTop: 20
   },
   headerTitle: {
-    flex: 3,
-    paddingTop: 20,
+    flex: 4,
+    alignItems: "center",
     justifyContent: "center"
+  },
+  left: {
+    flex: 1
+  },
+  right: {
+    flex: 1
   },
   h1: {
     color: "white"

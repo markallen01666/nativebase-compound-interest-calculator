@@ -1,6 +1,5 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
-import { AppLoading } from "expo";
+import { StyleSheet } from "react-native";
 import { Container, Text, H2 } from "native-base";
 import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
@@ -30,7 +29,8 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     marginHorizontal: 40,
-    marginVertical: 40,
+    marginTop: 40,
+    marginBottom: 20,
     alignItems: "center"
   },
   text: {
