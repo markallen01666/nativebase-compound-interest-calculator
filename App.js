@@ -1,35 +1,39 @@
-import React from 'react';
-import { AppLoading } from 'expo';
-import { Container, Text } from 'native-base';
-import * as Font from 'expo-font';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from "react";
+import { AppLoading } from "expo";
+import { Container, Text } from "native-base";
+import * as Font from "expo-font";
+import { Ionicons } from "@expo/vector-icons";
 
-export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isReady: false,
-    };
-  }
+import HomeScreen from "./screens/HomeScreen";
+import CalculatorScreen from "./screens/CalculatorScreen";
+import AboutScrenn from "./screens/AboutScreen"; 
 
-  async componentDidMount() {
-    await Font.loadAsync({
-      Roboto: require('native-base/Fonts/Roboto.ttf'),
-      Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
-      ...Ionicons.font,
-    });
-    this.setState({ isReady: true });
-  }
+// fetch fonts returning promise for <AppLoading />
+const fetchFonts = () => {
+  return Font.loadAsync({
+    Roboto: require("native-base/Fonts/Roboto.ttf"),
+    Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
+    ...Ionicons.font
+  });
+};
 
-  render() {
-    if (!this.state.isReady) {
-      return <AppLoading />;
-    }
+export default function App() {
+  const [dataLoaded, setDataLoaded] = useState(false);
 
+  // render wait until assets loaded
+  if (!dataLoaded) {
     return (
-      <Container>
-        <Text>Open up App.js to start working on your app!</Text>
-      </Container>
+      <AppLoading
+        startAsync={fetchFonts}
+        onFinish={() => setDataLoaded(true)}
+        onError={err => console.log(err)}
+      />
     );
   }
+
+  let content = (
+    <Text>-- This is the basic app converted to functional component --</Text>
+  );
+
+  return <Container>{content}</Container>;
 }
