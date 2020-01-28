@@ -1,14 +1,17 @@
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Keyboard } from "react-native";
 import {
+  Body,
+  Button,
+  Card,
+  CardItem,
   Container,
   Content,
   Form,
+  H2,
   Item,
   Input,
-  Text,
-  H2,
-  Button
+  Text
 } from "native-base";
 import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
@@ -58,13 +61,12 @@ const CalculatorScreen = props => {
   };
 
   const calculateCompoundInterest = () => {
+    Keyboard.dismiss();
     if (parseFloat(interestRate) > 0) {
       let amt =
         parseFloat(startAmount) *
         (1 + parseFloat(interestRate) / 100) ** parseInt(yearsInvested);
       setResult(amt.toFixed(2));
-    } else {
-      console.log("DIV0 ERROR!");
     }
   };
 
@@ -74,6 +76,33 @@ const CalculatorScreen = props => {
     setYearsInvested("");
   };
 
+  const resultCard = (
+    <Card>
+      <CardItem header bordered style={styles.cardHeader}>
+        <Text>Result</Text>
+      </CardItem>
+      <CardItem bordered>
+        <Body>
+          <Text>
+            {startAmount} invested for {yearsInvested} years, with a compounded
+            annual interest rate of {interestRate}%, would yield:
+          </Text>
+        </Body>
+      </CardItem>
+      <CardItem footer bordered>
+        <Text>{result}</Text>
+      </CardItem>
+    </Card>
+  );
+
+  let resultLayout = <Text></Text>;
+  
+  if (result > 0) {
+    resultLayout = resultCard;
+  }
+
+
+
   return (
     <Container style={styles.screen}>
       <H2 style={styles.h2}>Calculate total</H2>
@@ -81,58 +110,56 @@ const CalculatorScreen = props => {
         Enter the amount invested, the annual interest rate percentage, and the
         number of years that the funds will be invested.
       </Text>
-      <Text style={styles.text}>
-        The total is made up of the original amount invested plus the total
-        compounded interest over the years the fund were invested.
-      </Text>
-      <Content style={styles.content}>
-        <Form style={styles.form}>
-          <Item>
-            <Input
-              placeholder="Amount invested"
-              style={styles.input}
-              blurOnSubmit
-              autoCapitalize="none"
-              autoCorrect={false}
-              keyboardType="number-pad"
-              maxLength={10}
-              onChangeText={startAmountHandler}
-              value={startAmount}
-            />
-          </Item>
-          <Item style={styles.item}>
-            <Input
-              placeholder="Interest Rate % per year"
-              style={styles.input}
-              blurOnSubmit
-              autoCapitalize="none"
-              autoCorrect={false}
-              keyboardType="number-pad"
-              maxLength={10}
-              onChangeText={interestRateHandler}
-              value={interestRate}
-            />
-          </Item>
-          <Item style={styles.item}>
-            <Input
-              placeholder="Number of years funds invested"
-              style={styles.input}
-              blurOnSubmit
-              autoCapitalize="none"
-              autoCorrect={false}
-              keyboardType="number-pad"
-              maxLength={10}
-              onChangeText={yearsInvestedHandler}
-              value={yearsInvested}
-            />
-          </Item>
-          <View style={styles.button}>
-            <Button rounded onPress={calculateCompoundInterest}>
-              <Text style={styles.buttonText}>Calculate</Text>
-            </Button>
-          </View>
-          <Text>Result: {result}</Text>
-        </Form>
+      <Content padder style={styles.content}>
+        <Card>
+          <Form style={styles.form}>
+            <Item>
+              <Input
+                placeholder="Amount invested"
+                style={styles.input}
+                blurOnSubmit
+                autoCapitalize="none"
+                autoCorrect={false}
+                keyboardType="number-pad"
+                maxLength={10}
+                onChangeText={startAmountHandler}
+                value={startAmount}
+              />
+            </Item>
+            <Item style={styles.item}>
+              <Input
+                placeholder="Interest Rate % per year"
+                style={styles.input}
+                blurOnSubmit
+                autoCapitalize="none"
+                autoCorrect={false}
+                keyboardType="number-pad"
+                maxLength={10}
+                onChangeText={interestRateHandler}
+                value={interestRate}
+              />
+            </Item>
+            <Item style={styles.item}>
+              <Input
+                placeholder="Number of years funds invested"
+                style={styles.input}
+                blurOnSubmit
+                autoCapitalize="none"
+                autoCorrect={false}
+                keyboardType="number-pad"
+                maxLength={10}
+                onChangeText={yearsInvestedHandler}
+                value={yearsInvested}
+              />
+            </Item>
+            <View style={styles.button}>
+              <Button rounded onPress={calculateCompoundInterest}>
+                <Text style={styles.buttonText}>Calculate</Text>
+              </Button>
+            </View>
+          </Form>
+        </Card>
+        {resultLayout}
       </Content>
     </Container>
   );
@@ -147,14 +174,14 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   content: {
-    width: "70%"
+    width: "80%"
   },
   form: {
     paddingVertical: 40
   },
   h2: {},
   text: {
-    paddingTop: 20,
+    paddingVertical: 20,
     textAlign: "center"
   },
   button: {
